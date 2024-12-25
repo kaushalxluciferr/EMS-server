@@ -12,9 +12,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 connectToDB()
 const app=express();
-app.use(cors({
-    origin: 'http://localhost:5173' // Replace with your React app's origin
-}));
+app.use(cors());
 
 app.use(express.static('publics/uploads'))
 app.use(express.json())
