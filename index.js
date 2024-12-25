@@ -12,7 +12,10 @@ import dotenv from 'dotenv'
 dotenv.config()
 connectToDB()
 const app=express();
-app.use(cors());
+app.use(cors({
+    origin:"https://ems-frontend-tan-sigma.vercel.app",
+    credentials:true
+}));
 
 app.use(express.static('publics/uploads'))
 app.use(express.json())
