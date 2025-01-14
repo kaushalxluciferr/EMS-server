@@ -1,24 +1,12 @@
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
-import multer from "multer";
-import path from "path";
 import Employee from "../models/employee.js";
-import Department from "../models/department.js";
-
+import {v2 as cloudinary} from 'cloudinary'
 // Function to store the picture in the file
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "publics/uploads");
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // e.g., 1212.png
-    },
-});
-
-const upload = multer({ storage: storage });
 
 const addEmployee = async (req, res) => {
     try {
+        
         const {
             name,
             email,
@@ -33,10 +21,15 @@ const addEmployee = async (req, res) => {
             role,
         } = req.body;
 
+        const imageFile=req.file
+
+        const imageUpload=await cloudinary.uploader.upload(imageFile.path)
+
+
         // Check if the email is already registered
         const user = await User.findOne({ email });
         if (user) {
-            return res.status(400).json({
+            return res.status(300).json({
                 success: false,
                 error: "HEY DUDE, YOU HAVE ALREADY REGISTERED",
             });
@@ -51,7 +44,7 @@ const addEmployee = async (req, res) => {
             email,
             password: hashpas,
             role,
-            profileImage: req.file ? req.file.filename : "",
+            profileImage: req.file ? imageUpload.secure_url: "",
         });
         const saveUser = await newUser.save();
 
@@ -71,7 +64,7 @@ const addEmployee = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: "Created successfully",
+            error: "Created successfully",
         });
     } catch (error) {
         return res.status(500).json({
@@ -98,9 +91,40 @@ try{
 }
 
 
+const deleteEmp=async(req,res)=>{
+    const {_id}=req.params
+
+    try{
+const userdelete=await Employee.findById(_id)
+const deluser=await User.findById(userdelete.userId._id)
+if(!userdelete)
+    {
+        return res.status(404).json({
+            success:false,
+            error:"user not found"
+        })
+        
+    }
+    await userdelete.deleteOne()
+    await deluser.deleteOne()
+
+return res.status(200).json({
+    success:true,
+    error:"deleted successfully",
+    userdelete,
+    deluser
+})
+    }catch(error)
+    {
+        return res.status(500).json({
+            success:false,
+            error:error.message
+        })
+    }
+}
+
 const viewEmployee = async (req, res) => {
     const { _id } = req.params;
-    console.log("Fetching employee with ID:", _id); // Debugging log
 
     try {
         let employee
@@ -195,4 +219,4 @@ const fetchEmployeesByDepId=async (req,res)=>{
     }
 }
 
-export { addEmployee, upload,getEmployee,viewEmployee,updateEmployee,fetchEmployeesByDepId };
+export { addEmployee,getEmployee,deleteEmp,viewEmployee,updateEmployee,fetchEmployeesByDepId };

@@ -9,15 +9,14 @@ import leaveRouter from './routes/leave.js'
 import settingRouter from './routes/setting.js'
 import dashRouter from './routes/dashboard.js'
 import dotenv from 'dotenv'
+import connectCloudinary from './db/cloudinary.js';
 dotenv.config()
 connectToDB()
+connectCloudinary()
 const app=express();
-app.use(cors({
-    origin:"https://ems-frontend-tan-sigma.vercel.app",
-    credentials:true
-}));
+app.use(cors());
 
-app.use(express.static('publics/uploads'))
+// app.use(express.static('publics/uploads'))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use('/api/auth',authRouter)

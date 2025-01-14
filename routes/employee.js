@@ -1,7 +1,7 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
-import { addEmployee, upload,getEmployee,viewEmployee,updateEmployee,fetchEmployeesByDepId } from "../controllers/employeeController.js";
-
+import { addEmployee,getEmployee,viewEmployee,updateEmployee,fetchEmployeesByDepId, deleteEmp } from "../controllers/employeeController.js";
+import upload from "../db/multer.js";
 const router = express.Router();
 
 // Route to add a new employee
@@ -12,6 +12,7 @@ router.post(
     addEmployee // Controller logic for adding an employee
 );
 router.get('/',authMiddleware,getEmployee)
+router.delete("/delete/:_id",authMiddleware,deleteEmp)
 router.get('/:_id',authMiddleware,viewEmployee)
 router.put('/:_id',authMiddleware,updateEmployee)
 router.get('/department/:_id',authMiddleware,fetchEmployeesByDepId)
