@@ -27,6 +27,9 @@ app.use('/api/leave',leaveRouter)
 app.use('/api/setting',settingRouter)
 app.use('/api/dashboard',dashRouter)
 
+app.get('/',(req,res)=>{
+    res.send("hey sanamika")
+})
 app.listen(process.env.PORT,()=>{
     console.log(`server is running ${process.env.PORT} `);
     
