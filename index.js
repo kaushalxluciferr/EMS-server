@@ -14,8 +14,10 @@ dotenv.config()
 connectToDB()
 connectCloudinary()
 const app=express();
-app.use(cors());
-
+app.use(cors({
+  origin: '*', // Allows all origins
+  credentials: true
+}));
 // app.use(express.static('publics/uploads'))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
