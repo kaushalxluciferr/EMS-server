@@ -35,6 +35,7 @@ const addEmployee = async (req, res) => {
             });
         }
 
+
         // Hash the password
         const hashpas = await bcrypt.hash(password, 10);
 
@@ -72,7 +73,8 @@ const addEmployee = async (req, res) => {
             error: error.message || "Failed to store Employee",
         });
     }
-};
+}
+
 const getEmployee=async (req,res)=>{
 try{
     const employees=await Employee.find().populate("userId").populate("department")

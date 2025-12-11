@@ -3,6 +3,7 @@ import { Schema } from "mongoose";
 import Department from '../models/department.js'
 import User from "./user.js";
 
+
 const employeeSchema=new Schema({
     userId:{
         type:Schema.Types.ObjectId,ref:"User",required:true
